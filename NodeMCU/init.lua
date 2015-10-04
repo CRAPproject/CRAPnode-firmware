@@ -10,6 +10,7 @@ function startup()
 
 tmr.alarm(0,10000,0,startup)
 
+
  
  --wifi.sta.config("TNCAP488E39","D9E0A1BA8C")
  --wifi.sta.connect()
