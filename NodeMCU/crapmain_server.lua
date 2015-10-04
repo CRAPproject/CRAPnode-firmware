@@ -1,33 +1,6 @@
 --crapmain.lua
 --This is the main module for the crap nodes
 
-function onConnection(conn)
-    conn:on("receive",onStatusRequest)
-end
-
-function onStatusRequest(conn,payload)
-    print (payload)
-    conn:send('{status:ok}')
-    conn:close()
-    requestData(conn)
-end
-
-function requestData(conn)
-    print ('Data Has been Requested\n')
-    rCon=net.createConnection(net.TCP, false) 
-    rCon:on("receive", onUpdateRequest)
-    rCon:connect(6372,"192.168.1.42")
-    rCon:send("GET / HTTP/1.1\r\nHost: www.nodemcu.com\r\n"
-    .."Connection: keep-alive\r\nAccept: */*\r\n\r\n")
-    
-end
-
-function onUpdateRequest(conn, payload)
-    print('Received Payload: \n')
-    print(payload)
-end
-
-
 print ('in crapmain')
 --Initialise UART 9600baud, 8 data bits, no parity, 1 stop bit)
 --uart.setup(0,9600,8,0,1,0)
@@ -45,10 +18,33 @@ wifi.sta.config(SSID,PW)
 if wifi.getmode() then
     print('Wifi Active\n')
     srv=net.createServer(net.TCP) 
-    srv:listen(6170,onConnection)
+    srv:listen(80,function(conn) 
+    conn:on("receive",function(conn,payload) 
+        data = get_http_req(payload)
+        print (data["cmd"])
+        conn:send("<h1> Hello, NodeMCU.</h1>")
+        end) 
+    end)
+
     print('Server Active\n')
 else
     print('No Wifi\n')
+end
+
+function get_http_req (request)
+   local buf = "";
+   local _, _, method, path, vars = string.find(request, "([A-Z]+) (.+)?(.+) HTTP");
+   if(method == nil)then
+       _, _, method, path = string.find(request, "([A-Z]+) (.+) HTTP");
+   end
+   local _GET = {}
+   if (vars ~= nil)then
+       for k, v in string.gmatch(vars, "(%w+)=(%w+)&*") do
+       _GET[k] = v
+       end
+   end
+
+   return _GET
 end
 
 
