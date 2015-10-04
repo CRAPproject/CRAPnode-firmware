@@ -16,9 +16,10 @@ function requestData(conn)
     print ('Data Has been Requested\n')
     rCon=net.createConnection(net.TCP, false) 
     rCon:on("receive", onUpdateRequest)
-    rCon:connect(6372,"192.168.1.42")
-    rCon:send("GET / HTTP/1.1\r\nHost: www.nodemcu.com\r\n"
+    rCon:connect(6372,"192.168.1.179")
+    rCon:send("GET /a.crap?nodeid=1234&type=update&pinnumber=1&pinstate=0 HTTP/1.1\r\nHost: www.nodemcu.com\r\n"
     .."Connection: keep-alive\r\nAccept: */*\r\n\r\n")
+    --rCon:send("a.crap?nodeid=1234&type=update&pinnumber=1&pinstate=0")
     
 end
 
