@@ -22,11 +22,13 @@ simpleTCPServer.sh has been writted to monitor the data
 request sent from the CrapNode to the server and send
 back dummy data as defined in response.json.
 
-To Run on Linux
+##To Run on Linux##
+
 1. Ensure simpleTCPServer.sh is executable
 2. run ./simpleTCPServer.sh from the command line.
 
-To Run on Window
+##To Run on Windows##
+
 1. Download the latest Ubuntu Distribution
 2. Install it
 3. Follow "To Run on Linux" instructions
